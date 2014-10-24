@@ -11,62 +11,101 @@ angular.module('myApp.view1', ['ngRoute'])
 
     .controller('View1Ctrl', ['$scope', '$interval', '$timeout', function ($scope, $interval, $timeout) {
 
-        var deck = [];
+        $scope.level = 1;
 
-        for (var i = 0; i < 25; i++) {
-            deck.push({
-                id: i,
-                value: i,
-                flipped: true
-            });
-        }
+        var numCards = 50;
+        var numHighlighted = 1;
 
-        for (i = 0; i < 25; i++) {
-            deck.push({
-                id: i,
-                value: i,
-                flipped: true
-            });
-        }
+        var deck = initialize(numCards);
+        highlight(deck, numHighlighted);
 
         $scope.cards = deck;
-        $scope.exposedCard = null;
 
         $scope.countDown = 1;
+        $scope.correctCount = 0;
 
         $interval(function () {
             $scope.countDown = $scope.countDown - 1;
 
             if ($scope.countDown == 0) {
-                for (i = 0; i < $scope.cards.length; i++) {
-                    $scope.cards[i].flipped = false;
+                for (var i = 0; i < $scope.cards.length; i++) {
+                    $scope.cards[i].selected = false;
                 }
             }
         }, 1000, 10);
 
-        $scope.toggleCard = function(card) {
+        $scope.toggleCard = function (card) {
 
-            var exposed = $scope.exposedCard;
+            card.selected = true;
 
-            if (!exposed) {
-                card.flipped = true;
-                $scope.exposedCard = card
-            } else {
-                card.flipped = true;
-                if (exposed.value == card.value) {
-                    $scope.exposedCard = null;
-                } else {
+            if (card.highlighted) {
+                $scope.correctCount++;
 
-                    $timeout(function() {
-                        exposed.flipped = false;
-                        card.flipped = false;
-                        $scope.exposedCard = null;
-                    }, 2000);
+                if ($scope.correctCount == numHighlighted) {
+                    $scope.status = "YOU WIN";
+
+                    $timeout(function () {
+                        for (var j = 0; j < $scope.cards.length; j++) {
+                            $scope.cards[j].highlighted = false;
+                            $scope.cards[j].selected = false;
+                        }
+                        highlight($scope.cards, ++numHighlighted);
+
+                        $scope.countDown = 1;
+                        $interval(function () {
+                            $scope.countDown = 2;
+
+                            if ($scope.countDown == 0) {
+                                for (var i = 0; i < $scope.cards.length; i++) {
+                                    $scope.cards[i].selected = false;
+                                }
+                            }
+
+                            $scope.countDown--;
+                        }, 1000, 2);
+
+                        $scope.status = "";
+                    }, 3000);
                 }
             }
 
-            $scope.selectedCard = card;
-            //card.flipped = true;
-            console.log('card = ', card.flipped);
         };
-    }]);
+    }]
+);
+
+var initialize = function(numCards) {
+    var deck = [];
+
+    for (var i = 0; i < numCards; i++) {
+        deck.push({
+            id: i,
+            value: i,
+            highlighted: false,
+            selected: false
+        });
+    }
+
+    return deck;
+};
+
+var highlight = function(deck, numHighlighted) {
+    console.log('highlighting random cards');
+    console.log('numHighlighted = ', numHighlighted);
+
+    var highlightCount = 0;
+
+    // todo : this may become inefficient once numHighlighted approaches numCards
+    while (highlightCount < numHighlighted) {
+        var random = Math.floor(Math.random() * deck.length);
+
+        var randomCard = deck[random];
+
+        console.log('randomCard = ', randomCard.id);
+
+        if (!randomCard.highlighted) {
+            randomCard.highlighted = true;
+            randomCard.selected = true;
+            highlightCount++;
+        }
+    }
+};

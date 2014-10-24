@@ -4,13 +4,14 @@
 
 <p>Countdown: {{countDown}}</p>
 
+<p>Status: {{status}}</p>
+
 <div class="card" ng-repeat="card in cards"
-                  ng-class="{}"
                   ng-click="toggleCard(card)">
-    <div class="card-front hiddencard" ng-class="{flipped: card.flipped}">
+    <div class="card-front hiddencard" ng-class="{flipped: card.selected}">
         <span>{{card.value}}</span>
     </div>
-    <div class="card-back" ng-class="{hiddencard: card.flipped}">
+    <div class="card-back" ng-class="{hiddencard: card.selected}">
         <span>hidden</span>
     </div>
 

@@ -52,5 +52,7 @@ div.card {
 
 .flipped {
   display: inline-block;
-  color: #F00;
+  background-color: #0F0;
+  width: 100%;
+  height: 100%;
 }
