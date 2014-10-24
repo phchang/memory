@@ -1,1 +1,17 @@
 <p>This is the partial for view 1.</p>
+
+<p>selected card = {{selectedCard.value}}</p>
+
+<p>Countdown: {{countDown}}</p>
+
+<div class="card" ng-repeat="card in cards"
+                  ng-class="{}"
+                  ng-click="toggleCard(card)">
+    <div class="card-front hiddencard" ng-class="{flipped: card.flipped}">
+        <span>{{card.value}}</span>
+    </div>
+    <div class="card-back" ng-class="{hiddencard: card.flipped}">
+        <span>hidden</span>
+    </div>
+
+</div>
