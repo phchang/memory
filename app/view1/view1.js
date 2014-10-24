@@ -13,7 +13,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
         $scope.level = 1;
 
-        var numCards = 50;
+        var numCards = 20;
         var numHighlighted = 1;
 
         var deck = initialize(numCards);
@@ -34,7 +34,13 @@ angular.module('myApp.view1', ['ngRoute'])
             }
         }, 1000, 10);
 
+        var initializing = false;
+
         $scope.toggleCard = function (card) {
+
+            if (initializing) {
+                return;
+            }
 
             card.selected = true;
 
@@ -45,28 +51,28 @@ angular.module('myApp.view1', ['ngRoute'])
                     $scope.status = "YOU WIN";
 
                     $timeout(function () {
-                        for (var j = 0; j < $scope.cards.length; j++) {
-                            $scope.cards[j].highlighted = false;
-                            $scope.cards[j].selected = false;
-                        }
+                        initializing = true;
+                        $scope.level++;
+                        $scope.cards = initialize(numCards);
+
                         highlight($scope.cards, ++numHighlighted);
 
                         $scope.countDown = 1;
-                        $interval(function () {
-                            $scope.countDown = 2;
 
-                            if ($scope.countDown == 0) {
-                                for (var i = 0; i < $scope.cards.length; i++) {
-                                    $scope.cards[i].selected = false;
-                                }
+                        $timeout(function() {
+                            for (var i = 0; i < $scope.cards.length; i++) {
+                                $scope.cards[i].selected = false;
                             }
 
-                            $scope.countDown--;
-                        }, 1000, 2);
+                            $scope.correctCount = 0;
+                            initializing = false;
+                        }, 2000);
 
                         $scope.status = "";
-                    }, 3000);
+                    }, 1000);
                 }
+            } else {
+                console.log("selected card not highlighted");
             }
 
         };
