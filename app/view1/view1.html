@@ -7,7 +7,7 @@
 <div class="card" ui-if="cards"
                   ng-repeat="card in cards"
                   ng-click="toggleCard(card)">
-    <div class="card-front hiddencard" ng-class="{flipped: card.selected}">
+    <div class="card-front hiddencard" ng-class="{flipped: card.selected, incorrect: card.incorrect}">
         <span>{{card.value}}</span>
     </div>
     <div class="card-back" ng-class="{hiddencard: card.selected}">

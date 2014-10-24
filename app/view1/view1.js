@@ -25,14 +25,14 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.correctCount = 0;
 
         $interval(function () {
-            $scope.countDown = $scope.countDown - 1;
 
             if ($scope.countDown == 0) {
-                for (var i = 0; i < $scope.cards.length; i++) {
-                    $scope.cards[i].selected = false;
-                }
+                resetSelections($scope.cards);
             }
-        }, 1000, 10);
+
+            $scope.countDown = $scope.countDown - 1;
+
+        }, 1000, 2);
 
         var initializing = false;
 
@@ -54,15 +54,12 @@ angular.module('myApp.view1', ['ngRoute'])
                         initializing = true;
                         $scope.level++;
                         $scope.cards = initialize(numCards);
-
                         highlight($scope.cards, ++numHighlighted);
 
                         $scope.countDown = 1;
 
                         $timeout(function() {
-                            for (var i = 0; i < $scope.cards.length; i++) {
-                                $scope.cards[i].selected = false;
-                            }
+                            resetSelections($scope.cards);
 
                             $scope.correctCount = 0;
                             initializing = false;
@@ -72,6 +69,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     }, 1000);
                 }
             } else {
+                card.incorrect = true;
                 console.log("selected card not highlighted");
             }
 
@@ -87,7 +85,8 @@ var initialize = function(numCards) {
             id: i,
             value: i,
             highlighted: false,
-            selected: false
+            selected: false,
+            incorrect: false
         });
     }
 
@@ -114,4 +113,10 @@ var highlight = function(deck, numHighlighted) {
             highlightCount++;
         }
     }
+};
+
+var resetSelections = function(deck) {
+  for (var i = 0; i < deck.length; i++) {
+      deck[i].selected = false;
+  }
 };
