@@ -6,7 +6,8 @@
 
 <p>Status: {{status}}</p>
 
-<div class="card" ng-repeat="card in cards"
+<div class="card" ui-if="cards"
+                  ng-repeat="card in cards"
                   ng-click="toggleCard(card)">
     <div class="card-front hiddencard" ng-class="{flipped: card.selected}">
         <span>{{card.value}}</span>
