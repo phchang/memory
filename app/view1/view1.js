@@ -49,6 +49,7 @@ angular.module('myApp.view1', ['ngRoute'])
                 $scope.correctCount++;
 
                 if ($scope.correctCount == numHighlighted) {
+                    $scope.gamestarted = false;
                     $scope.status = "YOU WIN";
 
                     $timeout(function () {
@@ -72,6 +73,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     }, 1000);
                 }
             } else {
+                $scope.gamestarted = false;
                 card.incorrect = true;
                 //card.value = "WRONG!";
                 console.log("incorrect selection!");
