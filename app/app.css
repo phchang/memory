@@ -68,6 +68,10 @@ div.card {
   background: -webkit-linear-gradient(top, #fe5456 0%, #d30024 100%) !important;
 }
 
+.missed {
+  background : -webkit-linear-gradient(top, rgba(134, 254, 101, 0.10) 0%, rgba(6, 211, 21, 0.10) 100%) !important;
+}
+
 div#level {
   position: relative;
   text-align: center;

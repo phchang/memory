@@ -24,10 +24,10 @@
 <div id="container">
     <div class="card" ui-if="cards"
                       ng-repeat="card in cards"
-                      ng-class="{selected: card.selected, incorrect: card.incorrect}"
+                      ng-class="{selected: card.selected, incorrect: card.incorrect, missed: card.missed}"
                       ng-click="toggleCard(card)">
         <div class="card-front hiddencard" ng-class="{flipped: card.selected, incorrect: card.incorrect}">
-            <span>{{card.value}}</span>
+            <span>&nbsp;</span>
         </div>
         <div class="card-back" ng-class="{hiddencard: card.selected}">
             <span>&nbsp;</span>

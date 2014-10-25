@@ -11,7 +11,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
     .controller('View1Ctrl', ['$scope', '$interval', '$timeout', function ($scope, $interval, $timeout) {
         $scope.level = 1;
-        $scope.timeleft = 75;
+        $scope.timeleft = 100;
         $scope.gamestarted = false;
 
         var numCards = 20;
@@ -25,15 +25,19 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.countDown = 1;
         $scope.correctCount = 0;
 
+        // countdown
         $interval(function () {
-
-            if ($scope.countDown == 0) {
-                resetSelections($scope.cards);
-            }
-
             $scope.countDown = $scope.countDown - 1;
 
         }, 1000, 2);
+
+        // reset the selections when the timer is done
+        $timeout(function () {
+            if ($scope.countDown == 0) {
+                resetSelections($scope.cards);
+                $scope.gamestarted = true;
+            }
+        }, 2000);
 
         var initializing = false;
 
@@ -73,10 +77,21 @@ angular.module('myApp.view1', ['ngRoute'])
                     }, 1000);
                 }
             } else {
+                // the user made an incorrect selection
                 $scope.gamestarted = false;
                 card.incorrect = true;
-                //card.value = "WRONG!";
-                console.log("incorrect selection!");
+
+                // show the remaining cards
+                var cards = $scope.cards;
+
+                for (var i = 0; i < cards.length; i++) {
+                    var card = cards[i];
+
+                    if (card.highlighted && !card.selected) {
+                        card.missed = true;
+                        card.value = 'X';
+                    }
+                }
 
                 initializing = true;
 
