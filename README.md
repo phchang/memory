@@ -1,7 +1,5 @@
 # Memory Grid Game
 
-----
-
 ## Running the Application
 
 Start the web server:
