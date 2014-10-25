@@ -5,6 +5,7 @@
 ## Running the Application
 
 Start the web server:
+
     npm start
 
 Browse to the app at `http://localhost:8000/app/index.html`
