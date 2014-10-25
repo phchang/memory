@@ -1,19 +1,37 @@
-<p>selected card = {{selectedCard.value}}</p>
+<div id="level">{{level}}</div>
 
 <p>Countdown: {{countDown}}</p>
 
 <p>Status: {{status}}</p>
 
-<p>Level: {{level}}</p>
+<div id="game-options">
+<a ng-click="start()">Start</a>
+</div>
 
-<div class="card" ui-if="cards"
-                  ng-repeat="card in cards"
-                  ng-click="toggleCard(card)">
-    <div class="card-front hiddencard" ng-class="{flipped: card.selected, incorrect: card.incorrect}">
-        <span>{{card.value}}</span>
-    </div>
-    <div class="card-back" ng-class="{hiddencard: card.selected}">
-        <span>hidden</span>
+<div id="metrics">
+
+    <div id="selectioncount">
+        {{correctCount}}
     </div>
 
+    <div id="timeleft">
+        <div id="progressbar" ng-class="{start: gamestarted, stop: !gamestarted}" style="width: {{timeleft}}%;">
+    </div>
+</div>
+
+</div>
+
+<div id="container">
+    <div class="card" ui-if="cards"
+                      ng-repeat="card in cards"
+                      ng-class="{selected: card.selected, incorrect: card.incorrect}"
+                      ng-click="toggleCard(card)">
+        <div class="card-front hiddencard" ng-class="{flipped: card.selected, incorrect: card.incorrect}">
+            <span>{{card.value}}</span>
+        </div>
+        <div class="card-back" ng-class="{hiddencard: card.selected}">
+            <span>&nbsp;</span>
+        </div>
+
+    </div>
 </div>

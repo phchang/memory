@@ -10,8 +10,9 @@ angular.module('myApp.view1', ['ngRoute'])
     }])
 
     .controller('View1Ctrl', ['$scope', '$interval', '$timeout', function ($scope, $interval, $timeout) {
-
         $scope.level = 1;
+        $scope.timeleft = 75;
+        $scope.gamestarted = false;
 
         var numCards = 20;
         var numHighlighted = 1;
@@ -63,6 +64,8 @@ angular.module('myApp.view1', ['ngRoute'])
 
                             $scope.correctCount = 0;
                             initializing = false;
+                            console.log('setting gamestarted to true');
+                            $scope.gamestarted = true;
                         }, 2000);
 
                         $scope.status = "";
@@ -70,7 +73,7 @@ angular.module('myApp.view1', ['ngRoute'])
                 }
             } else {
                 card.incorrect = true;
-                card.value = "WRONG!";
+                //card.value = "WRONG!";
                 console.log("incorrect selection!");
 
                 initializing = true;
@@ -86,6 +89,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
                         $scope.correctCount = 0;
                         initializing = false;
+
                     }, 2000);
 
                     $scope.status = "";
@@ -94,6 +98,10 @@ angular.module('myApp.view1', ['ngRoute'])
             }
 
         };
+
+        $scope.start = function() {
+            console.log('start clicked!');
+        }
     }]
 );
 
@@ -114,18 +122,11 @@ var initialize = function(numCards) {
 };
 
 var highlight = function(deck, numHighlighted) {
-    console.log('highlighting random cards');
-    console.log('numHighlighted = ', numHighlighted);
-
     var highlightCount = 0;
 
-    // todo : this may become inefficient once numHighlighted approaches numCards
+    // todo : there is probably a better way to do this when highlightCount approaches numHighlighted
     while (highlightCount < numHighlighted) {
-        var random = Math.floor(Math.random() * deck.length);
-
-        var randomCard = deck[random];
-
-        console.log('randomCard = ', randomCard.id);
+        var randomCard = deck[Math.floor(Math.random() * deck.length)];
 
         if (!randomCard.highlighted) {
             randomCard.highlighted = true;
