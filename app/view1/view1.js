@@ -70,7 +70,27 @@ angular.module('myApp.view1', ['ngRoute'])
                 }
             } else {
                 card.incorrect = true;
-                console.log("selected card not highlighted");
+                card.value = "WRONG!";
+                console.log("incorrect selection!");
+
+                initializing = true;
+
+                $timeout(function () {
+                    $scope.cards = initialize(numCards);
+                    highlight($scope.cards, numHighlighted);
+
+                    $scope.countDown = 1;
+
+                    $timeout(function() {
+                        resetSelections($scope.cards);
+
+                        $scope.correctCount = 0;
+                        initializing = false;
+                    }, 2000);
+
+                    $scope.status = "";
+                }, 3000);
+
             }
 
         };
