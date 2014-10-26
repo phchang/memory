@@ -104,11 +104,17 @@ div#metrics {
 }
 
 div#selectioncount {
+  position: relative;
+  margin: 5px auto;
   text-align: center;
 
   font-size: 2.5em;
+  width: 2em;
   font-weight: 100;
   color: #999;
+
+  border: 1px solid #CCC;
+  border-radius: 5px;
 }
 
 div#timeleft {
@@ -122,14 +128,21 @@ div#timeleft {
 
 div#progressbar {
   position: relative;
+  margin: 0 auto;
   height: 100%;
   background-color: #DDD;
 
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.start {
+.start, .won {
   background-color: #00e900 !important;
+  color: #FFF !important;
+}
+
+.lost {
+  background-color: #F00 !important;
+  color: #FFF !important;
 }
 
 .stop {

@@ -8,7 +8,7 @@
 
 <div id="metrics">
 
-    <div id="selectioncount">
+    <div id="selectioncount" ng-class="{won: status == 'WON', lost: status == 'LOST'}">
         {{correctCount}}
     </div>
 

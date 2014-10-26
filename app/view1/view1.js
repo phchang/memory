@@ -14,6 +14,12 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.timeleft = 100; // percentage
         $scope.gamestarted = false;
 
+        // 15 seconds = 15,000 ms
+        // every 100 ms
+        $interval(function() {
+            $scope.timeleft = $scope.timeleft - 0.7;
+        }, 100, 150);
+
         var numCards = 20;
         var numHighlighted = 1;
 
@@ -45,7 +51,7 @@ angular.module('myApp.view1', ['ngRoute'])
                 if ($scope.correctCount == numHighlighted) {
                     // level is complete
                     $scope.gamestarted = false;
-                    $scope.status = "YOU WIN";
+                    $scope.status = "WON";
 
                     $scope.level++;
 
@@ -69,6 +75,7 @@ angular.module('myApp.view1', ['ngRoute'])
             } else {
                 // the user made an incorrect selection
                 $scope.gamestarted = false;
+                $scope.status = 'LOST';
                 card.incorrect = true;
 
                 // show the remaining cards
