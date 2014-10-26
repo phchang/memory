@@ -11,32 +11,24 @@ angular.module('myApp.view1', ['ngRoute'])
 
     .controller('View1Ctrl', ['$scope', '$interval', '$timeout', function ($scope, $interval, $timeout) {
         $scope.level = 1;
-        $scope.timeleft = 100;
+        $scope.timeleft = 100; // percentage
         $scope.gamestarted = false;
 
         var numCards = 20;
         var numHighlighted = 1;
+        var countDown = 1;
 
         var deck = initialize(numCards);
         highlight(deck, numHighlighted);
 
         $scope.cards = deck;
 
-        $scope.countDown = 1;
         $scope.correctCount = 0;
-
-        // countdown
-        $interval(function () {
-            $scope.countDown = $scope.countDown - 1;
-
-        }, 1000, 2);
 
         // reset the selections when the timer is done
         $timeout(function () {
-            if ($scope.countDown == 0) {
-                resetSelections($scope.cards);
-                $scope.gamestarted = true;
-            }
+            resetSelections($scope.cards);
+            $scope.gamestarted = true;
         }, 2000);
 
         var initializing = false;
@@ -61,8 +53,6 @@ angular.module('myApp.view1', ['ngRoute'])
                         $scope.level++;
                         $scope.cards = initialize(numCards);
                         highlight($scope.cards, ++numHighlighted);
-
-                        $scope.countDown = 1;
 
                         $timeout(function() {
                             resetSelections($scope.cards);
@@ -99,8 +89,6 @@ angular.module('myApp.view1', ['ngRoute'])
                     $scope.cards = initialize(numCards);
                     highlight($scope.cards, numHighlighted);
 
-                    $scope.countDown = 1;
-
                     $timeout(function() {
                         resetSelections($scope.cards);
 
@@ -111,9 +99,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
                     $scope.status = "";
                 }, 3000);
-
             }
-
         };
 
         $scope.start = function() {
