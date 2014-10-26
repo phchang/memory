@@ -12,3 +12,10 @@
 
 # Nice to Have
 * keyboard shortcuts
+
+# Read
+http://www.benlesh.com/2013/08/angularjs-watch-digest-and-apply-oh-my.html
+
+# Useful links
+http://stackoverflow.com/questions/19338684/angularjs-force-re-rendering-full-refresh-a-directive-template
+http://css-tricks.com/almanac/properties/t/transition/
