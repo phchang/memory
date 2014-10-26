@@ -16,13 +16,11 @@ angular.module('myApp.view1', ['ngRoute'])
 
         var numCards = 20;
         var numHighlighted = 1;
-        var countDown = 1;
 
         var deck = initialize(numCards);
-        highlight(deck, numHighlighted);
+        highlightAndSelectRandomCards(deck, numHighlighted);
 
         $scope.cards = deck;
-
         $scope.correctCount = 0;
 
         // reset the selections when the timer is done
@@ -45,22 +43,24 @@ angular.module('myApp.view1', ['ngRoute'])
                 $scope.correctCount++;
 
                 if ($scope.correctCount == numHighlighted) {
+                    // level is complete
                     $scope.gamestarted = false;
                     $scope.status = "YOU WIN";
 
+                    $scope.level++;
+
+                    // reinitialize for the next level
+                    initializing = true;
                     $timeout(function () {
-                        initializing = true;
-                        $scope.level++;
                         $scope.cards = initialize(numCards);
-                        highlight($scope.cards, ++numHighlighted);
+                        highlightAndSelectRandomCards($scope.cards, ++numHighlighted);
 
                         $timeout(function() {
                             resetSelections($scope.cards);
 
                             $scope.correctCount = 0;
-                            initializing = false;
-                            console.log('setting gamestarted to true');
                             $scope.gamestarted = true;
+                            initializing = false;
                         }, 2000);
 
                         $scope.status = "";
@@ -75,11 +75,11 @@ angular.module('myApp.view1', ['ngRoute'])
                 var cards = $scope.cards;
 
                 for (var i = 0; i < cards.length; i++) {
-                    var card = cards[i];
+                    var c = cards[i];
 
-                    if (card.highlighted && !card.selected) {
-                        card.missed = true;
-                        card.value = 'X';
+                    if (c.highlighted && !c.selected) {
+                        c.missed = true;
+                        c.value = 'X';
                     }
                 }
 
@@ -87,12 +87,13 @@ angular.module('myApp.view1', ['ngRoute'])
 
                 $timeout(function () {
                     $scope.cards = initialize(numCards);
-                    highlight($scope.cards, numHighlighted);
+                    highlightAndSelectRandomCards($scope.cards, numHighlighted);
 
                     $timeout(function() {
                         resetSelections($scope.cards);
 
                         $scope.correctCount = 0;
+                        $scope.gamestarted = true;
                         initializing = false;
 
                     }, 2000);
@@ -114,7 +115,6 @@ var initialize = function(numCards) {
     for (var i = 0; i < numCards; i++) {
         deck.push({
             id: i,
-            value: i,
             highlighted: false,
             selected: false,
             incorrect: false
@@ -124,7 +124,7 @@ var initialize = function(numCards) {
     return deck;
 };
 
-var highlight = function(deck, numHighlighted) {
+var highlightAndSelectRandomCards = function(deck, numHighlighted) {
     var highlightCount = 0;
 
     // todo : there is probably a better way to do this when highlightCount approaches numHighlighted
