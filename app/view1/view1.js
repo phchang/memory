@@ -10,15 +10,11 @@ angular.module('myApp.view1', ['ngRoute'])
     }])
 
     .controller('View1Ctrl', ['$scope', '$interval', '$timeout', function ($scope, $interval, $timeout) {
+
         $scope.level = 1;
+        $scope.timeout = 15000;
         $scope.timeleft = 100; // percentage
         $scope.gamestarted = false;
-
-        // 15 seconds = 15,000 ms
-        // every 100 ms
-        $interval(function() {
-            $scope.timeleft = $scope.timeleft - 0.7;
-        }, 100, 150);
 
         var numCards = 20;
         var numHighlighted = 1;
@@ -29,10 +25,25 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.cards = deck;
         $scope.correctCount = 0;
 
+        var stop;
+
         // reset the selections when the timer is done
         $timeout(function () {
             resetSelections($scope.cards);
             $scope.gamestarted = true;
+
+            var startTime = new Date().getTime();
+            var endTime = startTime + $scope.timeout;
+
+            stop = $interval(function () {
+                if (new Date().getTime() > endTime) {
+                    stopTimer();
+                }
+
+                $scope.timeleft = ((endTime - new Date().getTime())/$scope.timeout) * 100;
+
+                // todo calculate percentage here for the progress bar
+            }, 100);
         }, 2000);
 
         var initializing = false;
@@ -50,6 +61,8 @@ angular.module('myApp.view1', ['ngRoute'])
 
                 if ($scope.correctCount == numHighlighted) {
                     // level is complete
+                    $interval.cancel(stop);
+                    $scope.timeleft = 100;
                     $scope.gamestarted = false;
                     $scope.status = "WON";
 
@@ -67,6 +80,18 @@ angular.module('myApp.view1', ['ngRoute'])
                             $scope.correctCount = 0;
                             $scope.gamestarted = true;
                             initializing = false;
+
+                            var startTime = new Date().getTime();
+                            var endTime = startTime + $scope.timeout;
+
+                            stop = $interval(function () {
+                                if (new Date().getTime() > endTime) {
+                                    console.log('STOP THE GAME!');
+                                    stopTimer();
+                                }
+
+                                $scope.timeleft = ((endTime - new Date().getTime())/$scope.timeout) * 100;
+                            }, 100);
                         }, 2000);
 
                         $scope.status = "";
@@ -74,6 +99,9 @@ angular.module('myApp.view1', ['ngRoute'])
                 }
             } else {
                 // the user made an incorrect selection
+                $scope.timeleft = 100; // todo make a function call out of this
+                $interval.cancel(stop);
+
                 $scope.gamestarted = false;
                 $scope.status = 'LOST';
                 card.incorrect = true;
@@ -103,6 +131,8 @@ angular.module('myApp.view1', ['ngRoute'])
                         $scope.gamestarted = true;
                         initializing = false;
 
+                        stop = startTimer();
+
                     }, 2000);
 
                     $scope.status = "";
@@ -111,8 +141,68 @@ angular.module('myApp.view1', ['ngRoute'])
         };
 
         $scope.start = function() {
-            console.log('start clicked!');
-        }
+            if (!$scope.gamestarted) {
+
+                $scope.cards = initialize(numCards);
+                highlightAndSelectRandomCards($scope.cards, numHighlighted);
+
+                $timeout(function() {
+                    resetSelections($scope.cards);
+
+                    $scope.correctCount = 0;
+                    $scope.gamestarted = true;
+                    initializing = false;
+
+                    stop = startTimer();
+
+                }, 2000);
+
+                $scope.status = "";
+
+
+            }
+        };
+
+        var startTimer = function () {
+            var startTime = new Date().getTime();
+            var endTime = startTime + $scope.timeout;
+
+            return $interval(function () {
+                if (new Date().getTime() > endTime) {
+                    console.log('STOP THE GAME!');
+                    stopTimer();
+                }
+
+                $scope.timeleft = ((endTime - new Date().getTime()) / $scope.timeout) * 100;
+            }, 100);
+        };
+
+        var stopTimer = function() {
+
+            console.log('Stopping the game');
+
+            if (angular.isDefined(stop)) {
+                $interval.cancel(stop);
+                console.log('stopping');
+
+                $scope.gamestarted = false;
+                $scope.status = 'LOST';
+
+                // show the remaining cards
+                var cards = $scope.cards;
+
+                for (var i = 0; i < cards.length; i++) {
+                    var c = cards[i];
+
+                    if (c.highlighted && !c.selected) {
+                        c.missed = true;
+                        c.value = 'X';
+                    }
+                }
+
+                initializing = true;
+            }
+        };
     }]
 );
 
@@ -120,12 +210,7 @@ var initialize = function(numCards) {
     var deck = [];
 
     for (var i = 0; i < numCards; i++) {
-        deck.push({
-            id: i,
-            highlighted: false,
-            selected: false,
-            incorrect: false
-        });
+        deck.push({ id: i, highlighted: false, selected: false, incorrect: false});
     }
 
     return deck;
