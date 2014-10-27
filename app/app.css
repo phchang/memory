@@ -70,14 +70,17 @@ div.card {
 }
 
 .selected {
+  background-color: #06d315;
   background : -webkit-linear-gradient(top, #86fe65 0%, #06d315 100%) !important;
 }
 
 .incorrect {
+  background-color: #d30024;
   background: -webkit-linear-gradient(top, #fe5456 0%, #d30024 100%) !important;
 }
 
 .missed {
+  background-color: rgba(6, 211, 21, 0.20);
   background : -webkit-linear-gradient(top, rgba(134, 254, 101, 0.20) 0%, rgba(6, 211, 21, 0.20) 100%) !important;
 }
 
