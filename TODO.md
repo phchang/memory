@@ -1,14 +1,14 @@
 # Gameplay
-* (1) get start button working
-* (2) display selected count
-* (2) so remaining cards when losing
+* X (1) get start button working
+* X (2) display selected count
+* X (2) show remaining cards when losing
 * (3) increase time delay as level increases
 
 # Styling
-* hidden cards
-* error cards
-* display of scores
-* fonts? (http://www.creativebloq.com/typography/free-web-fonts-1131610)
+* X hidden cards
+* X error cards
+* X display of score
+* X fonts? (http://www.creativebloq.com/typography/free-web-fonts-1131610)
 
 # Nice to Have
 * keyboard shortcuts
