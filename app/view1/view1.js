@@ -192,7 +192,12 @@ var initialize = function(numCards) {
     var deck = [];
 
     for (var i = 0; i < numCards; i++) {
-        deck.push({ id: i, highlighted: false, selected: false, incorrect: false});
+        deck.push({
+            id: i,
+            highlighted: false, // indicates if the player needs to click this card
+            selected: false,    // if the player clicks it, selected = true
+            incorrect: false    // set to true if player clicks a card that is not highlighted
+        });
     }
 
     return deck;
