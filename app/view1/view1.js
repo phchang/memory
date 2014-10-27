@@ -44,7 +44,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
                 if ($scope.correctCount == numHighlighted) {
                     // level is complete
-                    $interval.cancel(stop);
+                    $interval.cancel(stop); // stop the progress bar, timer
                     $scope.timeleft = resetTimeLeft;
                     $scope.gamestarted = false;
                     $scope.status = "WON";
@@ -52,37 +52,15 @@ angular.module('myApp.view1', ['ngRoute'])
 
                     // reinitialize for the next level
                     initializing = true;
-                    $timeout(function () {
-                        // give a little extra time before moving to the next level
-                        $scope.start(true);
-                    }, 1000);
+                    // give a little extra time before moving to the next level
+                    $timeout(function () { $scope.start(true); }, 1000);
                 }
             } else {
                 // the user made an incorrect selection
-                $scope.timeleft = resetTimeLeft();
-                $interval.cancel(stop);
-
-                $scope.gamestarted = false;
-                $scope.status = 'LOST';
                 card.incorrect = true;
+                stopTimer();
 
-                // show the remaining cards
-                var cards = $scope.cards;
-
-                for (var i = 0; i < cards.length; i++) {
-                    var c = cards[i];
-
-                    if (c.highlighted && !c.selected) {
-                        c.missed = true;
-                        c.value = 'X';
-                    }
-                }
-
-                initializing = true;
-
-                $timeout(function () {
-                    $scope.start();
-                }, 3000);
+                $timeout(function () { $scope.start(); }, 3000);
             }
         };
 
@@ -103,9 +81,7 @@ angular.module('myApp.view1', ['ngRoute'])
                     $scope.correctCount = 0;
                     $scope.gamestarted = true;
                     initializing = false;
-
                     stop = startTimer();
-
                 }, 2000);
 
                 $scope.status = "";
