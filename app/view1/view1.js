@@ -50,7 +50,7 @@ angular.module('myApp.view1', ['ngRoute'])
                 if ($scope.correctCount == numHighlighted) {
                     // level is complete
                     $interval.cancel(stop); // stop the progress bar, timer
-                    $scope.timeleft = resetTimeLeft;
+                    $scope.timeleft = resetTimeLeft();
                     $scope.gamestarted = false;
                     $scope.status = "WON";
                     $scope.level++;
