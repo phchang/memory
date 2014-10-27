@@ -32,10 +32,14 @@ angular.module('myApp.view1', ['ngRoute'])
                 return;
             }
 
-            card.selected = true;
-
             if (card.highlighted) {
-                $scope.correctCount++;
+
+                if (!card.selected) {
+                    card.selected = true;
+                    $scope.correctCount++;
+                } else {
+                    return;
+                }
 
                 if ($scope.correctCount == numHighlighted) {
                     // level is complete
