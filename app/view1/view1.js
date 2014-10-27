@@ -16,6 +16,7 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.timeleft = resetTimeLeft(); // represents a percentage
         $scope.gamestarted = false;
         $scope.status = "NOT_STARTED";
+        $scope.gamestatus = "";
         $scope.correctCount = 0;
 
         var numCards = 20;
@@ -29,6 +30,10 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.toggleCard = function (card) {
 
             if (initializing) {
+                return;
+            }
+
+            if ($scope.gamestatus == 'WON') {
                 return;
             }
 
@@ -52,8 +57,20 @@ angular.module('myApp.view1', ['ngRoute'])
 
                     // reinitialize for the next level
                     initializing = true;
+
+                    if ($scope.level > numCards) {
+                        // game is over
+                        console.log('ending the game');
+                        $scope.level = "WIN!";
+                        $scope.gamestatus = "WON";
+                        return;
+                    }
+
                     // give a little extra time before moving to the next level
-                    $timeout(function () { $scope.start(true); }, 1000);
+                    $timeout(function () {
+                        $scope.start(true);
+                        $scope.correctCount = 0;
+                    }, 1000);
                 }
             } else {
                 // the user made an incorrect selection
