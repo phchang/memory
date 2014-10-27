@@ -13,7 +13,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
         $scope.level = 1;
         $scope.timeout = 15000;
-        $scope.timeleft = 100; // percentage
+        $scope.timeleft = resetTimeLeft(); // represents a percentage
         $scope.gamestarted = false;
         $scope.status = "NOT_STARTED";
         $scope.correctCount = 0;
@@ -34,6 +34,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
             if (card.highlighted) {
 
+                // prevent correctCount from being incremented if the card has already been chosen
                 if (!card.selected) {
                     card.selected = true;
                     $scope.correctCount++;
@@ -44,44 +45,21 @@ angular.module('myApp.view1', ['ngRoute'])
                 if ($scope.correctCount == numHighlighted) {
                     // level is complete
                     $interval.cancel(stop);
-                    $scope.timeleft = 100;
+                    $scope.timeleft = resetTimeLeft;
                     $scope.gamestarted = false;
                     $scope.status = "WON";
-
                     $scope.level++;
 
                     // reinitialize for the next level
                     initializing = true;
                     $timeout(function () {
-                        $scope.cards = initialize(numCards);
-                        highlightAndSelectRandomCards($scope.cards, ++numHighlighted);
-
-                        $timeout(function() {
-                            resetSelections($scope.cards);
-
-                            $scope.correctCount = 0;
-                            $scope.gamestarted = true;
-                            initializing = false;
-
-                            var startTime = new Date().getTime();
-                            var endTime = startTime + $scope.timeout;
-
-                            stop = $interval(function () {
-                                if (new Date().getTime() > endTime) {
-                                    console.log('STOP THE GAME!');
-                                    stopTimer();
-                                }
-
-                                $scope.timeleft = ((endTime - new Date().getTime())/$scope.timeout) * 100;
-                            }, 100);
-                        }, 2000);
-
-                        $scope.status = "";
+                        // give a little extra time before moving to the next level
+                        $scope.start(true);
                     }, 1000);
                 }
             } else {
                 // the user made an incorrect selection
-                $scope.timeleft = 100; // todo make a function call out of this
+                $scope.timeleft = resetTimeLeft();
                 $interval.cancel(stop);
 
                 $scope.gamestarted = false;
@@ -103,26 +81,17 @@ angular.module('myApp.view1', ['ngRoute'])
                 initializing = true;
 
                 $timeout(function () {
-                    $scope.cards = initialize(numCards);
-                    highlightAndSelectRandomCards($scope.cards, numHighlighted);
-
-                    $timeout(function() {
-                        resetSelections($scope.cards);
-
-                        $scope.correctCount = 0;
-                        $scope.gamestarted = true;
-                        initializing = false;
-
-                        stop = startTimer();
-
-                    }, 2000);
-
-                    $scope.status = "";
+                    $scope.start();
                 }, 3000);
             }
         };
 
-        $scope.start = function() {
+        $scope.start = function(incrementNumHighlighted) {
+
+            if (angular.isDefined(incrementNumHighlighted) && incrementNumHighlighted) {
+                ++numHighlighted;
+            }
+
             if (!$scope.gamestarted) {
 
                 $scope.cards = initialize(numCards);
@@ -140,8 +109,6 @@ angular.module('myApp.view1', ['ngRoute'])
                 }, 2000);
 
                 $scope.status = "";
-
-
             }
         };
 
@@ -222,4 +189,8 @@ var resetSelections = function(deck) {
   for (var i = 0; i < deck.length; i++) {
       deck[i].selected = false;
   }
+};
+
+var resetTimeLeft = function() {
+    return 100;
 };
