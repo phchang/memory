@@ -15,37 +15,15 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.timeout = 15000;
         $scope.timeleft = 100; // percentage
         $scope.gamestarted = false;
+        $scope.status = "NOT_STARTED";
+        $scope.correctCount = 0;
 
         var numCards = 20;
         var numHighlighted = 1;
 
-        var deck = initialize(numCards);
-        highlightAndSelectRandomCards(deck, numHighlighted);
-
-        $scope.cards = deck;
-        $scope.correctCount = 0;
+        $scope.cards = initialize(numCards);
 
         var stop;
-
-        // reset the selections when the timer is done
-        $timeout(function () {
-            resetSelections($scope.cards);
-            $scope.gamestarted = true;
-
-            var startTime = new Date().getTime();
-            var endTime = startTime + $scope.timeout;
-
-            stop = $interval(function () {
-                if (new Date().getTime() > endTime) {
-                    stopTimer();
-                }
-
-                $scope.timeleft = ((endTime - new Date().getTime())/$scope.timeout) * 100;
-
-                // todo calculate percentage here for the progress bar
-            }, 100);
-        }, 2000);
-
         var initializing = false;
 
         $scope.toggleCard = function (card) {

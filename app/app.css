@@ -34,6 +34,10 @@ body, html {
   padding: 0;
 }
 
+@font-face {
+  font-family: 'Entypo';
+  src: url('font/entypo.eot');
+}
 
 /*************************************/
 
@@ -41,7 +45,7 @@ div#container {
   position: relative;
   /*border: 1px solid #000;*/
   width: 80%;
-  margin: 0 auto;
+  margin: 10px auto 0 auto;
 }
 
 div.card {
@@ -72,6 +76,27 @@ div.card {
 .missed {
   background : -webkit-linear-gradient(top, rgba(134, 254, 101, 0.20) 0%, rgba(6, 211, 21, 0.20) 100%) !important;
 }
+
+/* game options */
+div#game-options {
+  font-family: Entypo;
+  font-size: 2em;
+
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  opacity: .2;
+}
+
+div#game-options a:hover {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+/*********************/
 
 div#levelheader {
   position: relative;
@@ -133,15 +158,18 @@ div#timeleft {
   width: 500px;
   height: 5px;
   border: 1px solid #CCC;
+  border-radius: 5px;
 }
 
 div#progressbar {
+  transition: all 0.2s ease;
+
   position: relative;
+
   margin: 0 auto;
   height: 100%;
   background-color: #DDD;
-
-  transition: all 0.2s ease;
+  border-radius: 5px;
 }
 
 .start, .won {

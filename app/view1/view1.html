@@ -2,7 +2,8 @@
 <div id="level">{{level}}</div>
 
 <div id="game-options">
-<a ng-click="start()">Start</a>
+    <div ng-class="{hidden: (status != 'NOT_STARTED')}"><a ng-click="start()">&#9654;</a></div>
+    <div ng-class="{hidden: (status == 'NOT_STARTED')}"><a ng-click="start()">&#10227;</a></div>
 </div>
 
 <div id="metrics">
