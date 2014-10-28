@@ -148,6 +148,7 @@ angular.module('myApp.view1', ['ngRoute'])
     }]
 );
 
+// todo : move these 'utility' functions into a service
 var initialize = function(numCards) {
     var deck = [];
 
